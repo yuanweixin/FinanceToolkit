@@ -27,8 +27,6 @@ from financetoolkit.base.models.models_controller import Models
 from financetoolkit.base.normalization_model import (
     convert_date_label as _convert_date_label,
     convert_financial_statements as _convert_financial_statements,
-    copy_normalization_files as _copy_normalization_files,
-    read_normalization_file as _read_normalization_file,
 )
 from financetoolkit.base.performance.performance_controller import Performance
 from financetoolkit.base.ratios.ratios_controller import Ratios
@@ -2198,19 +2196,3 @@ class Toolkit:
             return self._statistics_statement.loc[self._tickers[0]]
 
         return self._statistics_statement
-
-    def get_normalization_files(self, path: str = ""):
-        """
-        Copies the normalization files to a folder based on path. By default, this is the path
-        of the 'Downloads' folder.
-
-        Args:
-            path (str, optional): The path where to save the files to.
-
-        Returns:
-            Three csv files saved to the desired location.
-        """
-        if path:
-            _copy_normalization_files(path)
-        else:
-            _copy_normalization_files()

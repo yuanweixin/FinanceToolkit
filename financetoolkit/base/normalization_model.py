@@ -7,9 +7,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from base.normalization import MAPPINGS, FMP
 
-
-def read_normalization_file(statement: str, format_location: str = ""):
+def read_normalization_file(statement: str):
     """
     This function copies the normalization files as found inside the environment and saves them
     to a custom location defined by the user. This is designed to make it possible to edit these files
@@ -26,15 +26,7 @@ def read_normalization_file(statement: str, format_location: str = ""):
             "Please provide a valid statement type (balance, income, cash or statistics)."
         )
 
-    if format_location:
-        file_location = f"{format_location}/{statement}.csv"
-    else:
-        file_location = resources.files(__package__).joinpath(  # type: ignore
-            f"normalization/{statement}.csv"
-        )
-
-    return pd.read_csv(file_location, index_col=[0]).iloc[:, 0]
-
+    return pd.Series(MAPPINGS[FMP][statement])
 
 def convert_financial_statements(
     financial_statements: pd.DataFrame,
@@ -134,29 +126,3 @@ def convert_date_label(
 
     return financial_statement
 
-
-def copy_normalization_files(
-    format_location: str = "",
-    save_location: str | Path = Path(Path.home(), "Downloads"),
-):
-    """
-    This function copies the normalization files as found inside the environment and saves them
-    to a custom location defined by the user. This is designed to make it possible to edit these files
-    and supply them to the financial statement functions and within the Analyzer class.
-
-    Args:
-        format_location (string): the location to read the file from.
-        save_location (string): the location you wish to save the files to.
-    Returns:
-        Three csv files saved to the desired location.
-    """
-    print(f"Files are being saved to {save_location}")
-    for statement in ["balance", "income", "cash", "statistics"]:
-        if format_location:
-            file_location = f"{format_location}/{statement}.csv"
-        else:
-            file_location = resources.files(__package__).joinpath(  # type: ignore
-                f"normalization/{statement}.csv"
-            )
-
-        shutil.copyfile(file_location, Path(save_location, f"{statement}.csv"))
