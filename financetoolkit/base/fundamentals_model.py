@@ -740,7 +740,7 @@ def get_quote(tickers: list[str] | str, api_key: str) -> pd.DataFrame:
         "avgVolume": "Average Volume",
         "open": "Open",
         "previousClose": "Previous Close",
-        "eps": "EPS",
+        "eps": EPS,
         "pe": "PE",
         "earningsAnnouncement": "Earnings Announcement",
         "sharesOutstanding": "Shares Outstanding",
@@ -875,9 +875,9 @@ def get_earnings_calendar(
         pd.DataFrame: the rating data.
     """
     naming: dict = {
-        "eps": "EPS",
+        "eps": EPS,
         "epsEstimated": "Estimated EPS",
-        "revenue": "Revenue",
+        "revenue": REVENUE,
         "revenueEstimated": "Estimated Revenue",
         "fiscalDateEnding": "Fiscal Date Ending",
         "time": "Time",

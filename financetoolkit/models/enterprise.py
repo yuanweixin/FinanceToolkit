@@ -54,10 +54,10 @@ def get_enterprise_value_breakdown(
     components = {
         "Share Price": share_price,
         "Market Capitalization": market_cap,
-        "Total Debt": total_debt,
-        "Minority Interest": minority_interest,
+        TOTAL_DEBT: total_debt,
+        MINORITY_INTEREST: minority_interest,
         "Preferred Equity": preferred_equity,
-        "Cash and Cash Equivalents": cash_and_cash_equivalents,
+        CASH_AND_CASH_EQUIVALENTS: cash_and_cash_equivalents,
         "Enterprise Value": enterprise_value,
     }
 

@@ -149,12 +149,12 @@ class Models:
         ```
         """
         self._dupont_analysis = get_dupont_analysis(
-            self._income_statement.loc[:, "Net Income", :],
-            self._income_statement.loc[:, "Revenue", :],
-            self._balance_sheet_statement.loc[:, "Total Assets", :].shift(axis=1),
-            self._balance_sheet_statement.loc[:, "Total Assets", :],
-            self._balance_sheet_statement.loc[:, "Total Equity", :].shift(axis=1),
-            self._balance_sheet_statement.loc[:, "Total Equity", :],
+            self._income_statement.loc[:, NET_INCOME, :],
+            self._income_statement.loc[:, REVENUE, :],
+            self._balance_sheet_statement.loc[:, TOTAL_ASSETS, :].shift(axis=1),
+            self._balance_sheet_statement.loc[:, TOTAL_ASSETS, :],
+            self._balance_sheet_statement.loc[:, TOTAL_EQUITY, :].shift(axis=1),
+            self._balance_sheet_statement.loc[:, TOTAL_EQUITY, :],
         )
 
         if growth:
@@ -234,14 +234,14 @@ class Models:
         ```
         """
         self._extended_dupont_analysis = get_extended_dupont_analysis(
-            self._income_statement.loc[:, "Income Before Tax", :],
-            self._income_statement.loc[:, "Operating Income", :],
-            self._income_statement.loc[:, "Net Income", :],
-            self._income_statement.loc[:, "Revenue", :],
-            self._balance_sheet_statement.loc[:, "Total Assets", :].shift(axis=1),
-            self._balance_sheet_statement.loc[:, "Total Assets", :],
-            self._balance_sheet_statement.loc[:, "Total Equity", :].shift(axis=1),
-            self._balance_sheet_statement.loc[:, "Total Equity", :],
+            self._income_statement.loc[:, INCOME_BEFORE_TAX, :],
+            self._income_statement.loc[:, OPERATING_INCOME, :],
+            self._income_statement.loc[:, NET_INCOME, :],
+            self._income_statement.loc[:, REVENUE, :],
+            self._balance_sheet_statement.loc[:, TOTAL_ASSETS, :].shift(axis=1),
+            self._balance_sheet_statement.loc[:, TOTAL_ASSETS, :],
+            self._balance_sheet_statement.loc[:, TOTAL_EQUITY, :].shift(axis=1),
+            self._balance_sheet_statement.loc[:, TOTAL_EQUITY, :],
         )
 
         if growth:
@@ -323,9 +323,9 @@ class Models:
         ```
         """
         average_shares = (
-            self._income_statement.loc[:, "Weighted Average Shares Diluted", :]
+            self._income_statement.loc[:, WEIGHTED_AVERAGE_SHS_OUT_DIL, :]
             if diluted
-            else self._income_statement.loc[:, "Weighted Average Shares", :]
+            else self._income_statement.loc[:, WEIGHTED_AVERAGE_SHS_OUT, :]
         )
 
         years = self._cash_flow_statement.columns
@@ -337,13 +337,13 @@ class Models:
         self._enterprise_value_breakdown = get_enterprise_value_breakdown(
             share_price=share_prices,
             shares_outstanding=average_shares,
-            total_debt=self._balance_sheet_statement.loc[:, "Total Debt", :],
+            total_debt=self._balance_sheet_statement.loc[:, TOTAL_DEBT, :],
             minority_interest=self._balance_sheet_statement.loc[
-                :, "Minority Interest", :
+                :, MINORITY_INTEREST, :
             ],
-            preferred_equity=self._balance_sheet_statement.loc[:, "Preferred Stock", :],
+            preferred_equity=self._balance_sheet_statement.loc[:, PREFERRED_STOCK, :],
             cash_and_cash_equivalents=self._balance_sheet_statement.loc[
-                :, "Cash and Cash Equivalents", :
+                :, CASH_AND_CASH_EQUIVALENTS, :
             ],
         )
 
@@ -448,9 +448,9 @@ class Models:
         ```
         """
         average_shares = (
-            self._income_statement.loc[:, "Weighted Average Shares Diluted", :]
+            self._income_statement.loc[:, WEIGHTED_AVERAGE_SHS_OUT_DIL, :]
             if diluted
-            else self._income_statement.loc[:, "Weighted Average Shares", :]
+            else self._income_statement.loc[:, WEIGHTED_AVERAGE_SHS_OUT, :]
         )
 
         years = self._cash_flow_statement.columns
@@ -478,13 +478,13 @@ class Models:
         self._weighted_average_cost_of_capital = get_weighted_average_cost_of_capital(
             share_price=share_prices,
             total_shares_outstanding=average_shares,
-            interest_expense=self._income_statement.loc[:, "Interest Expense", :],
-            total_debt=self._balance_sheet_statement.loc[:, "Total Debt", :],
+            interest_expense=self._income_statement.loc[:, INTEREST_EXPENSE, :],
+            total_debt=self._balance_sheet_statement.loc[:, TOTAL_DEBT, :],
             risk_free_rate=risk_free_rate,
             beta=beta,
             benchmark_returns=benchmark_returns,
-            income_tax_expense=self._income_statement.loc[:, "Income Tax Expense", :],
-            income_before_tax=self._income_statement.loc[:, "Income Before Tax", :],
+            income_tax_expense=self._income_statement.loc[:, INCOME_TAX_EXPENSE, :],
+            income_before_tax=self._income_statement.loc[:, INCOME_BEFORE_TAX, :],
         )
 
         if growth:
@@ -531,7 +531,7 @@ class Models:
         perpetual_growth_rate: float | list | dict[str, float],
         weighted_average_cost_of_capital: float | list | dict[str, float],
         periods: int = 5,
-        cash_flow_type: str = "Free Cash Flow",
+        cash_flow_type: str = FREE_CASH_FLOW,
         rounding: int | None = None,
     ) -> pd.DataFrame:
         """
@@ -568,8 +568,8 @@ class Models:
             weighted average cost of capital for each ticker.
             periods (int, optional): The number of periods to use for the cash flow projections. Defaults to 5.
             cash_flow_type (str, optional): The type of cash flow to use for the cash flow projections.
-            Defaults to "Free Cash Flow". Other options are "Operating Cash Flow", "Change in Working Capital",
-            and "Capital Expenditure".
+            Defaults to FREE_CASH_FLOW. Other options are OPERATING_CASH_FLOW, CHANGE_IN_WORKING_CAPITAL,
+            and CAPITAL_EXPENDITURE.
             rounding (int, optional): The number of decimals to round the results to. Defaults to 4.
 
         Returns:
@@ -590,10 +590,10 @@ class Models:
         ```
         """
         if cash_flow_type not in [
-            "Free Cash Flow",
-            "Operating Cash Flow",
-            "Change in Working Capital",
-            "Capital Expenditure",
+            FREE_CASH_FLOW,
+            OPERATING_CASH_FLOW,
+            CHANGE_IN_WORKING_CAPITAL,
+            CAPITAL_EXPENDITURE,
         ]:
             raise ValueError(
                 "Invalid cash flow type. Please choose from the following: 'Free Cash Flow', 'Operating Cash Flow',"
@@ -669,15 +669,15 @@ class Models:
                 if wacc_dict
                 else weighted_average_cost_of_capital,
                 cash_and_cash_equivalents=self._balance_sheet_statement.loc[
-                    ticker, "Cash and Cash Equivalents"
+                    ticker, CASH_AND_CASH_EQUIVALENTS
                 ]
                 .dropna()
                 .iloc[-1],
-                total_debt=self._balance_sheet_statement.loc[ticker, "Total Debt"]
+                total_debt=self._balance_sheet_statement.loc[ticker, TOTAL_DEBT]
                 .dropna()
                 .iloc[-1],
                 shares_outstanding=self._income_statement.loc[
-                    ticker, "Weighted Average Shares Diluted"
+                    ticker, WEIGHTED_AVERAGE_SHS_OUT_DIL
                 ]
                 .dropna()
                 .iloc[-1],
